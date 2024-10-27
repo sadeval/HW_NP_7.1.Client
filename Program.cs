@@ -13,35 +13,28 @@ namespace UserRegistrationClient
     {
         static async Task Main(string[] args)
         {
-            // Адрес вашего сервера
-            string url = "https://localhost:7282/api/Registration"; // Используйте ваш фактический порт
+            string url = "https://localhost:7282/api/Registration";
 
-            // Создаем нового пользователя
             var newUser = new User
             {
                 Username = "testuser3",
                 Password = "password123",
-                Email = "testuser@example.com"
+                Email = "testuser@gmail.com"
             };
 
-            // Сериализуем пользователя в JSON
             string jsonData = JsonConvert.SerializeObject(newUser);
 
-            // Создаем HttpClient с обработчиком, игнорирующим ошибки SSL-сертификата
             var handler = new HttpClientHandler();
             handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
             using (var client = new HttpClient(handler))
             {
-                // Настраиваем запрос
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 try
                 {
-                    // Отправляем POST-запрос
                     var response = await client.PostAsync(url, content);
 
-                    // Читаем ответ
                     string responseString = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
@@ -66,7 +59,6 @@ namespace UserRegistrationClient
             }
         }
 
-        // Модель пользователя должна совпадать с моделью на сервере
         public class User
         {
             public string Username { get; set; }
